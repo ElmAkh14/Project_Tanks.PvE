@@ -8,23 +8,23 @@ class Shell(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.mask = pygame.mask.from_surface(self.image)
         self.angle = 0
-        self.image = pygame.transform.rotate(self.image, character.angle)
+        self.image = pygame.transform.rotate(self.image, -character.angle)
         if character.angle == 0:
             self.angle = 0
-            self.rect.x = character.rect.x + 12
+            self.rect.x = character.rect.x + ((character.rect.width - self.rect.width) // 2)
             self.rect.y = character.rect.y
         if character.angle == 90:
             self.angle = 90
-            self.rect.x = character.rect.x + 30
-            self.rect.y = character.rect.y + 12
+            self.rect.x = character.rect.x + character.rect.width
+            self.rect.y = character.rect.y + ((character.rect.height - self.rect.height) // 2)
         if character.angle == 180:
             self.angle = 180
-            self.rect.x = character.rect.x + 12
-            self.rect.y = character.rect.y + 30
+            self.rect.x = character.rect.x + ((character.rect.width - self.rect.width) // 2)
+            self.rect.y = character.rect.y + character.rect.height
         if character.angle == 270:
             self.angle = 270
             self.rect.x = character.rect.x
-            self.rect.y = character.rect.y + 12
+            self.rect.y = character.rect.y + ((character.rect.height - self.rect.height) // 2)
 
     def update(self):
         if self.angle == 0:
@@ -41,3 +41,6 @@ class Shell(pygame.sprite.Sprite):
         if not (-self.rect.width <= self.rect.x <= WINDOW_SIZE[0]
                 and -self.rect.height <= self.rect.y <= WINDOW_SIZE[1]):
             self.kill()
+        for sprite in barriers:
+            if pygame.sprite.collide_mask(self, sprite):
+                self.kill()
