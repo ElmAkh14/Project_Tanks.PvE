@@ -2,6 +2,7 @@ from modules import *
 
 
 class Shell(pygame.sprite.Sprite):
+    """Класс снаряда"""
     def __init__(self, character, *group):
         super(Shell, self).__init__(*group)
         self.image = load_image('shell.png', (255, 255, 255))
@@ -44,3 +45,14 @@ class Shell(pygame.sprite.Sprite):
         for sprite in barriers:
             if pygame.sprite.collide_mask(self, sprite):
                 self.kill()
+        if self in hero_shells:
+            for sprite in enemies:
+                if pygame.sprite.collide_mask(self, sprite):
+                    sprite.destroy()
+                    self.kill()
+        if self in enemy_shells:
+            for sprite in hero_group:
+                if pygame.sprite.collide_mask(self, sprite):
+                    sprite.destroy()
+                    self.kill()
+
