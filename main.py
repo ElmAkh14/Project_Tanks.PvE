@@ -8,7 +8,6 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode(size)
     screen.fill(HERBAL_COLOR)
 
-    # hero = Hero(hero_group, all_sprites)
     rain_simulator = RainSimulator(screen)
     game_screen, hero, enemies_spawns = load_level('level1.txt')
     cursor = pygame.sprite.Sprite(cursor_group)
@@ -94,6 +93,8 @@ if __name__ == '__main__':
                     if not enemy.is_destroyed:
                         enemy.do_anim()
             if event.type == ENEMYCHANGEMOVE:
+                if not show_in_game_flag:
+                    continue
                 for i in enemies:
                     if i.change_move():
                         shell = Shell(i, enemy_shells, shells_group, all_sprites)
@@ -107,77 +108,79 @@ if __name__ == '__main__':
                             killed_enemies_sprites += 1
             if event.type == RAIN:
                 rain = not rain
-            if event.type == pygame.USEREVENT:
-                if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-
-                    if event.ui_element == start:
-                        for sprite in chain(all_sprites, tracks_group):
-                            sprite.kill()
-                        game_screen, hero, enemies_spawns = load_level(level.current_state.selected_option + ".txt")
-                        show_in_game_flag = True
-                        show_manager_flag = False
-                        pygame.time.set_timer(NEWENEMYEVENT,
-                                              int(frequency_new_enemy.current_state.selected_option) * 1000)
+            if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
+                pass
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == start:
+                    for sprite in chain(all_sprites, tracks_group):
+                        sprite.kill()
+                    game_screen, hero, enemies_spawns = load_level(level.current_state.selected_option + ".txt")
+                    show_in_game_flag = True
+                    show_manager_flag = False
+                    pygame.time.set_timer(NEWENEMYEVENT, int(frequency_new_enemy.current_state.selected_option) * 1000)
+                    pos = choice(enemies_spawns)
+                    new_tracks = Tracks(tracks_group)
+                    enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
+                    while pygame.sprite.collide_mask(enemy, hero):
                         pos = choice(enemies_spawns)
-                        new_tracks = Tracks(tracks_group)
+                        enemy.kill()
                         enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
-                        while pygame.sprite.collide_mask(enemy, hero):
-                            pos = choice(enemies_spawns)
-                            enemy.kill()
-                            enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
-                        enemy.change_move()
+                    enemy.change_move()
 
-                    if event.ui_element == pause:
-                        show_in_game_flag = False
-                        show_pause_flag = True
+                if event.ui_element == pause:
+                    show_in_game_flag = False
+                    show_pause_flag = True
 
-                    if event.ui_element == resume:
-                        show_in_game_flag = True
-                        show_pause_flag = False
+                if event.ui_element == resume:
+                    show_in_game_flag = True
+                    show_pause_flag = False
 
-                    if event.ui_element == in_main_menu:
-                        killed_enemies_sprites = 0
-                        show_manager_flag = True
-                        show_in_game_flag = False
-                        show_pause_flag = False
-                        screen.fill(HERBAL_COLOR)
-                        for sprite in chain(all_sprites, tracks_group):
-                            sprite.kill()
-                        manager.draw_ui(screen)
+                if event.ui_element == in_main_menu:
+                    killed_enemies_sprites = 0
+                    show_manager_flag = True
+                    show_in_game_flag = False
+                    show_pause_flag = False
+                    screen.fill(HERBAL_COLOR)
+                    for sprite in chain(all_sprites, tracks_group):
+                        sprite.kill()
+                    manager.draw_ui(screen)
 
-                    if event.ui_element == in_main_menu_game_over:
-                        killed_enemies_sprites = 0
-                        show_manager_flag = True
-                        show_in_game_flag = False
-                        show_pause_flag = False
-                        game_over = False
-                        screen.fill(HERBAL_COLOR)
-                        for sprite in chain(all_sprites, tracks_group):
-                            sprite.kill()
-                        manager.draw_ui(screen)
+                if event.ui_element == in_main_menu_game_over:
+                    killed_enemies_sprites = 0
+                    show_manager_flag = True
+                    show_in_game_flag = False
+                    show_pause_flag = False
+                    game_over = False
+                    screen.fill(HERBAL_COLOR)
+                    for sprite in chain(all_sprites, tracks_group):
+                        sprite.kill()
+                    manager.draw_ui(screen)
 
-                    if event.ui_element == again_game_over or event.ui_element == again:
-                        killed_enemies_sprites = 0
-                        for sprite in chain(all_sprites, tracks_group):
-                            sprite.kill()
-                        show_in_game_flag = True
-                        show_pause_flag = False
-                        game_screen, hero, enemies_spawns = load_level(level.current_state.selected_option + ".txt")
-                        show_manager_flag = False
-                        game_over = False
+                if event.ui_element == again_game_over or event.ui_element == again:
+                    killed_enemies_sprites = 0
+                    for sprite in chain(all_sprites, tracks_group):
+                        sprite.kill()
+                    show_in_game_flag = True
+                    show_pause_flag = False
+                    game_screen, hero, enemies_spawns = load_level(level.current_state.selected_option + ".txt")
+                    show_manager_flag = False
+                    game_over = False
+                    pos = choice(enemies_spawns)
+                    new_tracks = Tracks(tracks_group)
+                    enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
+                    while pygame.sprite.collide_mask(enemy, hero):
                         pos = choice(enemies_spawns)
-                        new_tracks = Tracks(tracks_group)
+                        enemy.kill()
                         enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
-                        while pygame.sprite.collide_mask(enemy, hero):
-                            pos = choice(enemies_spawns)
-                            enemy.kill()
-                            enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
-                        enemy.change_move()
+                    enemy.change_move()
 
-            manager.process_events(event)
-            in_game_manager.process_events(event)
-            pause_manager.process_events(event)
-            game_over_manager.process_events(event)
+            try:
+                manager.process_events(event)
+                in_game_manager.process_events(event)
+                pause_manager.process_events(event)
+                game_over_manager.process_events(event)
+            except AttributeError:
+                pass
 
         manager.update(time_delta)
         in_game_manager.update(time_delta)
@@ -215,5 +218,4 @@ if __name__ == '__main__':
             pygame.mouse.set_visible(False)
             cursor_group.draw(screen)
         pygame.display.flip()
-        print(len(all_sprites))
     pygame.quit()

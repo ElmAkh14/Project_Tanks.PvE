@@ -18,7 +18,7 @@ def make_grass(*group, x, y):
     grass.rect.x, grass.rect.y = x, y
 
 
-def load_level(name: str, bgcolor=HERBAL_COLOR) -> (pygame.surface.Surface, Hero):
+def load_level(name: str, bgcolor=HERBAL_COLOR) -> (pygame.surface.Surface, Hero, list):
     """Загрузка карты уровня из папки levels"""
     hero = None
     enemies_spawns = []

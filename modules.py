@@ -160,11 +160,11 @@ pause = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((0, 0), (ELEMRECT
                                      manager=in_game_manager)
 
 
-def show_in_game_manager(screen: pygame.surface.Surface, killed_enemies_sprites) -> None:
+def show_in_game_manager(screen: pygame.surface.Surface, killed_enemies_spr) -> None:
     """Прорисовка менеджера во время игры"""
     in_game_manager.draw_ui(screen)
     text =\
-        f"Уничтожено врагов:\n{len(list(filter(lambda sprite:sprite.is_destroyed, enemies))) + killed_enemies_sprites}"
+        f"Уничтожено врагов:\n{len(list(filter(lambda sprite:sprite.is_destroyed, enemies))) + killed_enemies_spr}"
     killed_enemies_counter_label = medium_font.render(text, True, TEXT_COLOR)
     screen.blit(killed_enemies_counter_label, ((WINDOW_SIZE[0] - killed_enemies_counter_label.get_width()), 0))
 
@@ -179,13 +179,13 @@ again = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((WINDOW_SIZE[0] 
 
 resume = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((WINDOW_SIZE[0] - ELEMRECT[0]) // 2,
                                                                 400),
-                                                               ELEMRECT),
+                                                                ELEMRECT),
                                       text='Продолжить',
                                       manager=pause_manager)
 
 in_main_menu = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((WINDOW_SIZE[0] - ELEMRECT[0]) // 2,
-                                                                300),
-                                                               ELEMRECT),
+                                                                      300),
+                                                                      ELEMRECT),
                                             text='В главное меню',
                                             manager=pause_manager)
 
@@ -203,15 +203,15 @@ def show_pause_manager(screen: pygame.surface.Surface) -> None:
 # Менеджер при поражении
 game_over_manager = pygame_gui.UIManager(WINDOW_SIZE)
 in_main_menu_game_over = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((WINDOW_SIZE[0] - 2.5
-                                                                                    * ELEMRECT[0]) // 2,
-                                                                                    500),
-                                                                                   ELEMRECT),
+                                                                                  * ELEMRECT[0]) // 2,
+                                                                                 500),
+                                                                                ELEMRECT),
                                                       text='В главное меню',
                                                       manager=game_over_manager)
 again_game_over = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(((WINDOW_SIZE[0] + 0.5
-                                                                                    * ELEMRECT[0]) // 2,
-                                                                                    500),
-                                                                                   ELEMRECT),
+                                                                           * ELEMRECT[0]) // 2,
+                                                                          500),
+                                                                         ELEMRECT),
                                                text='Начать заново',
                                                manager=game_over_manager)
 
