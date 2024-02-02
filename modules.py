@@ -16,11 +16,11 @@ TEXT_COLOR = (76, 80, 82)
 WINDOW_SIZE = (600, 720)
 SELL_SIZE = (30, 30)
 ELEMRECT = (200, 50)
-NEWENEMYEVENT = pygame.USEREVENT + 2
-ENEMYCHANGEMOVE = pygame.USEREVENT + 3
-DELETEENEMY = pygame.USEREVENT + 4
-ANIMAION = pygame.USEREVENT + 5
-RAIN = pygame.USEREVENT + 6
+NEWENEMYEVENT = pygame.USEREVENT + 3
+ENEMYCHANGEMOVE = pygame.USEREVENT + 4
+DELETEENEMY = pygame.USEREVENT + 5
+ANIMAION = pygame.USEREVENT + 6
+RAIN = pygame.USEREVENT + 7
 STEP_TANK = 1
 STEP_SHELL = 10
 
@@ -141,7 +141,7 @@ level = pygame_gui.elements.UIDropDownMenu(relative_rect=pygame.Rect(((WINDOW_SI
 
 title = big_font.render('Танки.PvE', True, TEXT_COLOR)
 frequency_new_enemy_label = medium_font.render('       Частота\nпоявления врагов', True, TEXT_COLOR)
-level_label = medium_font.render('Уровень', True, TEXT_COLOR)
+level_label = medium_font.render('Карта', True, TEXT_COLOR)
 
 
 def show_main_manager(screen: pygame.surface.Surface) -> None:

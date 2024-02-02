@@ -9,7 +9,7 @@ if __name__ == '__main__':
     screen.fill(HERBAL_COLOR)
 
     rain_simulator = RainSimulator(screen)
-    game_screen, hero, enemies_spawns = load_level('level1.txt')
+    game_screen, hero, enemies_spawns = load_level('Карта 1.txt')
     cursor = pygame.sprite.Sprite(cursor_group)
     cursor.image = load_image("arrow.png")
     cursor.rect = cursor.image.get_rect()
@@ -36,7 +36,7 @@ if __name__ == '__main__':
             if event.type == pygame.KEYDOWN:
                 if show_pause_flag or game_over:
                     continue
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_ESCAPE:
                     hero.destroy()
                 if keys[pygame.K_w] or keys[pygame.K_d] or keys[pygame.K_s] or keys[pygame.K_a]:
                     hero.do_up, hero.do_right, hero.do_down, hero.do_left = False, False, False, False
@@ -108,8 +108,6 @@ if __name__ == '__main__':
                             killed_enemies_sprites += 1
             if event.type == RAIN:
                 rain = not rain
-            if event.type == pygame_gui.UI_DROP_DOWN_MENU_CHANGED:
-                pass
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == start:
                     in_game_manager.draw_ui(screen)
