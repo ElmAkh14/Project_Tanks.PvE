@@ -112,6 +112,7 @@ if __name__ == '__main__':
                 pass
             if event.type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == start:
+                    in_game_manager.draw_ui(screen)
                     for sprite in chain(all_sprites, tracks_group):
                         sprite.kill()
                     game_screen, hero, enemies_spawns = load_level(level.current_state.selected_option + ".txt")
@@ -157,8 +158,10 @@ if __name__ == '__main__':
                     manager.draw_ui(screen)
 
                 if event.ui_element == again_game_over or event.ui_element == again:
+                    if show_in_game_flag:
+                        pass
                     killed_enemies_sprites = 0
-                    for sprite in chain(all_sprites, tracks_group):
+                    for sprite in chain(all_sprites, tracks_group, enemies):
                         sprite.kill()
                     show_in_game_flag = True
                     show_pause_flag = False
@@ -175,10 +178,14 @@ if __name__ == '__main__':
                     enemy.change_move()
 
             try:
-                manager.process_events(event)
-                in_game_manager.process_events(event)
-                pause_manager.process_events(event)
-                game_over_manager.process_events(event)
+                if show_manager_flag:
+                    manager.process_events(event)
+                if show_in_game_flag:
+                    in_game_manager.process_events(event)
+                if show_pause_flag:
+                    pause_manager.process_events(event)
+                if game_over:
+                    game_over_manager.process_events(event)
             except AttributeError:
                 pass
 
