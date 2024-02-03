@@ -23,6 +23,7 @@ ANIMAION = pygame.USEREVENT + 6
 RAIN = pygame.USEREVENT + 7
 STEP_TANK = 1
 STEP_SHELL = 10
+MAX_ENEMIES = 15
 
 # Группы спрайтов
 all_sprites = pygame.sprite.Group()

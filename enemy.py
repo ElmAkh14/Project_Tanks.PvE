@@ -24,6 +24,7 @@ class Enemy(pygame.sprite.Sprite):
         self.move()
         self.rect.x %= WINDOW_SIZE[0]
         self.rect.y %= WINDOW_SIZE[1]
+        self.move_back()
         self.tracks.change_orientation(self)
 
     def destroy(self):
@@ -67,23 +68,25 @@ class Enemy(pygame.sprite.Sprite):
         if self.do_left:
             do_left(self)
             do_left(self.tracks)
-        for sprite in chain(barriers, hero_group):
-            if pygame.sprite.collide_mask(self, sprite):
-                if self.do_up:
-                    do_down(self)
-                    do_down(self.tracks)
-                if self.do_right:
-                    do_left(self)
-                    do_left(self.tracks)
-                if self.do_down:
-                    do_up(self)
-                    do_up(self.tracks)
-                if self.do_left:
-                    do_right(self)
-                    do_right(self.tracks)
-                self.change_move()
-                shell = Shell(self, enemy_shells, shells_group, all_sprites)
-                shot.play()
+        self.move_back()
+
+    def move_back(self):
+        if pygame.sprite.spritecollideany(self, barriers) or pygame.sprite.spritecollideany(self, hero_group):
+            if self.do_up:
+                do_down(self)
+                do_down(self.tracks)
+            if self.do_right:
+                do_left(self)
+                do_left(self.tracks)
+            if self.do_down:
+                do_up(self)
+                do_up(self.tracks)
+            if self.do_left:
+                do_right(self)
+                do_right(self.tracks)
+            self.change_move()
+            Shell(self, enemy_shells, shells_group, all_sprites)
+            shot.play()
 
     def transform_image(self):
         self.image = load_image('enemy.png', (255, 255, 255))

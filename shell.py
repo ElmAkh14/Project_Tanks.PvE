@@ -42,17 +42,23 @@ class Shell(pygame.sprite.Sprite):
         if not (-self.rect.width <= self.rect.x <= WINDOW_SIZE[0]
                 and -self.rect.height <= self.rect.y <= WINDOW_SIZE[1]):
             self.kill()
-        for sprite in barriers:
-            if pygame.sprite.collide_mask(self, sprite):
-                self.kill()
+            return
+        if pygame.sprite.spritecollideany(self, barriers):
+            self.kill()
+            return
         if self in hero_shells:
             for sprite in enemies:
                 if pygame.sprite.collide_mask(self, sprite):
                     sprite.destroy()
                     self.kill()
+                    return
         if self in enemy_shells:
             for sprite in hero_group:
                 if pygame.sprite.collide_mask(self, sprite):
                     sprite.destroy()
                     self.kill()
+                    return
+            if pygame.sprite.spritecollideany(self, enemies):
+                self.kill()
+                return
 

@@ -21,6 +21,7 @@ class Hero(pygame.sprite.Sprite):
         self.move()
         self.rect.x %= WINDOW_SIZE[0]
         self.rect.y %= WINDOW_SIZE[1]
+        self.back_move()
         self.tracks.change_orientation(self)
 
     def destroy(self):
@@ -52,17 +53,19 @@ class Hero(pygame.sprite.Sprite):
         if self.do_left:
             do_left(self)
             do_left(self.tracks)
-        for sprite in chain(barriers, enemies):
-            if pygame.sprite.collide_mask(self, sprite):
-                if self.do_up:
-                    do_down(self)
-                    do_down(self.tracks)
-                if self.do_right:
-                    do_left(self)
-                    do_left(self.tracks)
-                if self.do_down:
-                    do_up(self)
-                    do_up(self.tracks)
-                if self.do_left:
-                    do_right(self)
-                    do_right(self.tracks)
+        self.back_move()
+
+    def back_move(self):
+        if pygame.sprite.spritecollideany(self, barriers) or pygame.sprite.spritecollideany(self, enemies):
+            if self.do_up:
+                do_down(self)
+                do_down(self.tracks)
+            if self.do_right:
+                do_left(self)
+                do_left(self.tracks)
+            if self.do_down:
+                do_up(self)
+                do_up(self.tracks)
+            if self.do_left:
+                do_right(self)
+                do_right(self.tracks)

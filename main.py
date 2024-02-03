@@ -77,15 +77,15 @@ if __name__ == '__main__':
                     continue
 
             if event.type == NEWENEMYEVENT:
-                if len(enemies) < 20:
+                if len(enemies) < MAX_ENEMIES:
                     pos = choice(enemies_spawns)
                     new_tracks = Tracks(tracks_group)
-                    enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
-                    while pygame.sprite.collide_mask(enemy, hero):
+                    new_enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
+                    while pygame.sprite.collide_mask(new_enemy, hero):
                         pos = choice(enemies_spawns)
-                        enemy.kill()
-                        enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
-                    enemy.change_move()
+                        new_enemy.kill()
+                        new_enemy = Enemy(enemies, all_sprites, pos=pos, tracks=new_tracks)
+                    new_enemy.change_move()
 
             if event.type == ANIMAION:
                 hero.do_anim()
